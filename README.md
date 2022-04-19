@@ -21,6 +21,7 @@ gmssl@ubuntu:~/nginx_doc/GmSSL/build$ cmake ..
 gmssl@ubuntu:~/nginx_doc/GmSSL/build$ make
 gmssl@ubuntu:~/nginx_doc/GmSSL/build$ sudo make install
 ```
+
 ### 编译安装Nginx-with-GmSSLv3
 
 下载源代码
@@ -31,7 +32,6 @@ gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ cp auto/configure .
 gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ ./configure --with-http_ssl_module --without-http_upstream_zone_module --with-debug
 gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ make
 gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ sudo make install
-
 ```
 
 Nginx会默认安装到`usr/local/nginx`
@@ -160,14 +160,3 @@ master_process off;
 ```
 
 有可能随着安装的不同而不同。在调试中可以通过error.log查看错误信息。
-
-## 存在的一些问题
-
-目前GmSSL 3.0缺少一些特性，其中有些特性有可能不会支持。需要处理Nginx对这些特性的调用，并测试哪些特性对Nginx是可选的，不支持不会引发问题。
-
-* 非阻塞模式。目前GmSSL仅实现了阻塞模式，如果要支持非阻塞模式，需要对结构做比较大的调整，因此暂时可能不会支持这个功能。我们采取的办法是对Nginx传入的socket进行修改，将其从非阻塞模式改为阻塞模式，但是是否会对Nginx造成某些不良影响，或者是否可以直接配置Nginx为阻塞模式呢？
-* SESSION：GmSSL目前不支持SESSION。SESSION主要是优化了浏览器断续访问场景的握手延迟，对于长链接时间、高吞吐量的传输没有效果。支持SESSION需要增加SESSION存储的管理工作，GmSSL可能短时间之内不会支持SESSON，主要取决于是否有真实需求（比如集成在浏览器中）。
-* 握手重协商：不确定，可能没有必要。
-* Session Ticket，Ticket是对SESSION的效率的进一步优化，也降低了服务器的管理难度。但是安全性更低。似乎没有支持Ticket的必要。
-* 一些和安全有关的TLSEXT，这些功能是应该增加的。
-
