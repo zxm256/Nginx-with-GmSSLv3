@@ -2180,7 +2180,7 @@ ngx_http_variable_request_id(ngx_http_request_t *r,
 {
     u_char  *id;
 
-#if (NGX_OPENSSL)
+#if (NGX_GMSSL)
     u_char   random_bytes[16];
 #endif
 
@@ -2196,7 +2196,7 @@ ngx_http_variable_request_id(ngx_http_request_t *r,
     v->len = 32;
     v->data = id;
 
-#if (NGX_OPENSSL)
+#if (NGX_GMSSL)
     if (rand_bytes(random_bytes, 16) == 1) {
         ngx_hex_dump(id, random_bytes, 16);
         return NGX_OK;

@@ -11,7 +11,7 @@
 #include <ngx_event_connect.h>
 
 
-#if (!defined OPENSSL_NO_OCSP && defined SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB)
+#if (!defined GMSSL_NO_OCSP && defined SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB)
 
 
 typedef struct {
@@ -241,12 +241,12 @@ ngx_ssl_stapling_certificate(ngx_conf_t *cf, ngx_ssl_t *ssl, X509 *cert,
     }
 
 #ifdef SSL_CTRL_SELECT_CURRENT_CERT
-    /* OpenSSL 1.0.2+ */
+    /* GmSSL 1.0.2+ */
     SSL_CTX_select_current_cert(ssl->ctx, cert);
 #endif
 
 #ifdef SSL_CTRL_GET_EXTRA_CHAIN_CERTS
-    /* OpenSSL 1.0.1+ */
+    /* GmSSL 1.0.1+ */
     SSL_CTX_get_extra_chain_certs(ssl->ctx, &staple->chain);
 #else
     staple->chain = ssl->ctx->extra_certs;
@@ -379,7 +379,7 @@ ngx_ssl_stapling_issuer(ngx_conf_t *cf, ngx_ssl_t *ssl,
     for (i = 0; i < n; i++) {
         issuer = sk_X509_value(staple->chain, i);
         if (X509_check_issued(issuer, cert) == X509_V_OK) {
-#if OPENSSL_VERSION_NUMBER >= 0x10100001L
+#if GMSSL_VERSION_NUMBER >= 0x10100001L
             X509_up_ref(issuer);
 #else
             CRYPTO_add(&issuer->references, 1, CRYPTO_LOCK_X509);
@@ -451,7 +451,7 @@ ngx_ssl_stapling_responder(ngx_conf_t *cf, ngx_ssl_t *ssl,
     char                      *s;
     ngx_str_t                  rsp;
     ngx_url_t                  u;
-    STACK_OF(OPENSSL_STRING)  *aia;
+    STACK_OF(GMSSL_STRING)  *aia;
 
     if (responder->len == 0) {
 
@@ -466,8 +466,8 @@ ngx_ssl_stapling_responder(ngx_conf_t *cf, ngx_ssl_t *ssl,
             return NGX_DECLINED;
         }
 
-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-        s = sk_OPENSSL_STRING_value(aia, 0);
+#if GMSSL_VERSION_NUMBER >= 0x10000000L
+        s = sk_GMSSL_STRING_value(aia, 0);
 #else
         s = sk_value(aia, 0);
 #endif
@@ -592,11 +592,11 @@ ngx_ssl_certificate_status_callback(ngx_ssl_conn_t *ssl_conn, void *data)
     if (staple->staple.len
         && staple->valid >= ngx_time())
     {
-        /* we have to copy ocsp response as OpenSSL will free it by itself */
+        /* we have to copy ocsp response as GmSSL will free it by itself */
 
-        p = OPENSSL_malloc(staple->staple.len);
+        p = GMSSL_malloc(staple->staple.len);
         if (p == NULL) {
-            ngx_ssl_error(NGX_LOG_ALERT, c->log, 0, "OPENSSL_malloc() failed");
+            ngx_ssl_error(NGX_LOG_ALERT, c->log, 0, "GMSSL_malloc() failed");
             return SSL_TLSEXT_ERR_NOACK;
         }
 
@@ -725,7 +725,7 @@ ngx_ssl_stapling_time(ASN1_GENERALIZEDTIME *asn1time)
     time_t   time;
 
     /*
-     * OpenSSL doesn't provide a way to convert ASN1_GENERALIZEDTIME
+     * GmSSL doesn't provide a way to convert ASN1_GENERALIZEDTIME
      * into time_t.  To do this, we use ASN1_GENERALIZEDTIME_print(),
      * which uses the "MMM DD HH:MM:SS YYYY [GMT]" format (e.g.,
      * "Feb  3 00:55:52 2015 GMT"), and parse the result.
@@ -893,7 +893,7 @@ ngx_ssl_ocsp_validate(ngx_connection_t *c)
     ocsp->cert_status = V_OCSP_CERTSTATUS_GOOD;
     ocsp->conf = ocf;
 
-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER)
+#if (GMSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER)
 
     ocsp->certs = SSL_get0_verified_chain(c->ssl->connection);
 
@@ -1122,7 +1122,7 @@ ngx_ssl_ocsp_responder(ngx_connection_t *c, ngx_ssl_ocsp_ctx_t *ctx)
     char                      *s;
     ngx_str_t                  responder;
     ngx_url_t                  u;
-    STACK_OF(OPENSSL_STRING)  *aia;
+    STACK_OF(GMSSL_STRING)  *aia;
 
     if (ctx->host.len) {
         return NGX_OK;
@@ -1137,8 +1137,8 @@ ngx_ssl_ocsp_responder(ngx_connection_t *c, ngx_ssl_ocsp_ctx_t *ctx)
         return NGX_ERROR;
     }
 
-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-    s = sk_OPENSSL_STRING_value(aia, 0);
+#if GMSSL_VERSION_NUMBER >= 0x10000000L
+    s = sk_GMSSL_STRING_value(aia, 0);
 #else
     s = sk_value(aia, 0);
 #endif

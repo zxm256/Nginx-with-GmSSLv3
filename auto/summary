@@ -22,10 +22,10 @@ else
     esac
 fi
 
-case $OPENSSL in
-    YES)   echo "  + using system OpenSSL library" ;;
-    NONE)  echo "  + OpenSSL library is not used" ;;
-    *)     echo "  + using OpenSSL library: $OPENSSL" ;;
+case $GMSSL in
+    YES)   echo "  + using system GmSSL library" ;;
+    NONE)  echo "  + GmSSL library is not used" ;;
+    *)     echo "  + using GmSSL library: $GMSSL" ;;
 esac
 
 case $ZLIB in

@@ -21,8 +21,8 @@ END
 fi
 
 
-if [ $USE_OPENSSL = YES ]; then
-    . auto/lib/openssl/conf
+if [ $USE_GMSSL = YES ]; then
+    . auto/lib/gmssl/conf
 fi
 
 if [ $USE_ZLIB = YES ]; then

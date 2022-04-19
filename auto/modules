@@ -670,7 +670,7 @@ if [ $HTTP = YES ]; then
     fi
 
     if [ $HTTP_SSL = YES ]; then
-        USE_OPENSSL=YES
+        USE_GMSSL=YES
         have=NGX_HTTP_SSL . auto/have
 
         ngx_module_name=ngx_http_ssl_module
@@ -937,7 +937,7 @@ if [ $MAIL != NO ]; then
     ngx_module_incs=
 
     if [ $MAIL_SSL = YES ]; then
-        USE_OPENSSL=YES
+        USE_GMSSL=YES
         have=NGX_MAIL_SSL . auto/have
 
         ngx_module_name=ngx_mail_ssl_module
@@ -1033,7 +1033,7 @@ if [ $STREAM != NO ]; then
     ngx_module_incs=
 
     if [ $STREAM_SSL = YES ]; then
-        USE_OPENSSL=YES
+        USE_GMSSL=YES
         have=NGX_STREAM_SSL . auto/have
 
         ngx_module_name=ngx_stream_ssl_module
@@ -1254,13 +1254,13 @@ if test -n "$DYNAMIC_ADDONS"; then
 fi
 
 
-if [ $USE_OPENSSL = YES ]; then
+if [ $USE_GMSSL = YES ]; then
     ngx_module_type=CORE
-    ngx_module_name=ngx_openssl_module
+    ngx_module_name=ngx_gmssl_module
     ngx_module_incs=
-    ngx_module_deps=src/event/ngx_event_openssl.h
-    ngx_module_srcs="src/event/ngx_event_openssl.c
-                     src/event/ngx_event_openssl_stapling.c"
+    ngx_module_deps=src/event/ngx_event_gmssl.h
+    ngx_module_srcs="src/event/ngx_event_gmssl.c
+                     src/event/ngx_event_gmssl_stapling.c"
     ngx_module_libs=
     ngx_module_link=YES
     ngx_module_order=

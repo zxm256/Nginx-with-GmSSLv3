@@ -237,7 +237,7 @@ main(int argc, char *const *argv)
     }
 
     /* STUB */
-#if (NGX_OPENSSL)
+#if (NGX_GMSSL)
     ngx_ssl_init(log);
 #endif
 
@@ -435,10 +435,10 @@ ngx_show_version_info(void)
 #endif
 
 #if (NGX_SSL)
-        if (ngx_strcmp(ngx_ssl_version(), OPENSSL_VERSION_TEXT) == 0) {
-            ngx_write_stderr("built with " OPENSSL_VERSION_TEXT NGX_LINEFEED);
+        if (ngx_strcmp(ngx_ssl_version(), GMSSL_VERSION_TEXT) == 0) {
+            ngx_write_stderr("built with " GMSSL_VERSION_TEXT NGX_LINEFEED);
         } else {
-            ngx_write_stderr("built with " OPENSSL_VERSION_TEXT
+            ngx_write_stderr("built with " GMSSL_VERSION_TEXT
                              " (running with ");
             ngx_write_stderr((char *) (uintptr_t) ngx_ssl_version());
             ngx_write_stderr(")" NGX_LINEFEED);

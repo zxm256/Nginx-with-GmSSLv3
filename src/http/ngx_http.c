@@ -1343,7 +1343,7 @@ ngx_http_add_address(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
 
     if (lsopt->http2 && lsopt->ssl) {
         ngx_conf_log_error(NGX_LOG_WARN, cf, 0,
-                           "nginx was built with OpenSSL that lacks ALPN "
+                           "nginx was built with GmSSL that lacks ALPN "
                            "and NPN support, HTTP/2 is not enabled for %V",
                            &lsopt->addr_text);
     }

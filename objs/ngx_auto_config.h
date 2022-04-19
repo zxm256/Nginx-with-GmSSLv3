@@ -408,8 +408,8 @@
 #endif
 
 
-#ifndef NGX_OPENSSL
-#define NGX_OPENSSL  1
+#ifndef NGX_GMSSL
+#define NGX_GMSSL  1
 #endif
 
 

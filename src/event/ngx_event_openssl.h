@@ -4,8 +4,8 @@
  */
 
 
-#ifndef _NGX_EVENT_OPENSSL_H_INCLUDED_
-#define _NGX_EVENT_OPENSSL_H_INCLUDED_
+#ifndef _NGX_EVENT_GMSSL_H_INCLUDED_
+#define _NGX_EVENT_GMSSL_H_INCLUDED_
 
 
 #include <ngx_config.h>
@@ -21,7 +21,7 @@
 #define NGX_SSL_NAME     "GmSSLv3"
 
 
-#define OPENSSL_VERSION_TEXT GMSSL_VERSION_STR
+#define GMSSL_VERSION_TEXT GMSSL_VERSION_STR
 
 #define ngx_ssl_version()       gmssl_version_str()
 
@@ -213,4 +213,4 @@ void ngx_ssl_cleanup_ctx(void *data);
 
 
 
-#endif /* _NGX_EVENT_OPENSSL_H_INCLUDED_ */
+#endif /* _NGX_EVENT_GMSSL_H_INCLUDED_ */

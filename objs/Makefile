@@ -73,7 +73,7 @@ CORE_DEPS = src/core/nginx.h \
 	src/os/unix/ngx_process_cycle.h \
 	src/os/unix/ngx_linux_config.h \
 	src/os/unix/ngx_linux.h \
-	src/event/ngx_event_openssl.h \
+	src/event/ngx_event_gmssl.h \
 	src/core/ngx_regex.h \
 	objs/ngx_auto_config.h
 
@@ -173,8 +173,8 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/os/unix/ngx_linux_init.o \
 	objs/src/event/modules/ngx_epoll_module.o \
 	objs/src/os/unix/ngx_linux_sendfile_chain.o \
-	objs/src/event/ngx_event_openssl.o \
-	objs/src/event/ngx_event_openssl_stapling.o \
+	objs/src/event/ngx_event_gmssl.o \
+	objs/src/event/ngx_event_gmssl_stapling.o \
 	objs/src/core/ngx_regex.o \
 	objs/src/http/ngx_http.o \
 	objs/src/http/ngx_http_core_module.o \
@@ -297,8 +297,8 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/os/unix/ngx_linux_init.o \
 	objs/src/event/modules/ngx_epoll_module.o \
 	objs/src/os/unix/ngx_linux_sendfile_chain.o \
-	objs/src/event/ngx_event_openssl.o \
-	objs/src/event/ngx_event_openssl_stapling.o \
+	objs/src/event/ngx_event_gmssl.o \
+	objs/src/event/ngx_event_gmssl_stapling.o \
 	objs/src/core/ngx_regex.o \
 	objs/src/http/ngx_http.o \
 	objs/src/http/ngx_http_core_module.o \
@@ -835,18 +835,18 @@ objs/src/os/unix/ngx_linux_sendfile_chain.o:	$(CORE_DEPS) \
 		src/os/unix/ngx_linux_sendfile_chain.c
 
 
-objs/src/event/ngx_event_openssl.o:	$(CORE_DEPS) \
-	src/event/ngx_event_openssl.c
+objs/src/event/ngx_event_gmssl.o:	$(CORE_DEPS) \
+	src/event/ngx_event_gmssl.c
 	$(CC) -c $(CFLAGS) $(CORE_INCS) \
-		-o objs/src/event/ngx_event_openssl.o \
-		src/event/ngx_event_openssl.c
+		-o objs/src/event/ngx_event_gmssl.o \
+		src/event/ngx_event_gmssl.c
 
 
-objs/src/event/ngx_event_openssl_stapling.o:	$(CORE_DEPS) \
-	src/event/ngx_event_openssl_stapling.c
+objs/src/event/ngx_event_gmssl_stapling.o:	$(CORE_DEPS) \
+	src/event/ngx_event_gmssl_stapling.c
 	$(CC) -c $(CFLAGS) $(CORE_INCS) \
-		-o objs/src/event/ngx_event_openssl_stapling.o \
-		src/event/ngx_event_openssl_stapling.c
+		-o objs/src/event/ngx_event_gmssl_stapling.o \
+		src/event/ngx_event_gmssl_stapling.c
 
 
 objs/src/core/ngx_regex.o:	$(CORE_DEPS) \

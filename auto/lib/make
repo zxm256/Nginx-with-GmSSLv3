@@ -7,8 +7,8 @@ if [ $PCRE != NONE -a $PCRE != NO -a $PCRE != YES ]; then
     . auto/lib/pcre/make
 fi
 
-if [ $OPENSSL != NONE -a $OPENSSL != NO -a $OPENSSL != YES ]; then
-    . auto/lib/openssl/make
+if [ $GMSSL != NONE -a $GMSSL != NO -a $GMSSL != YES ]; then
+    . auto/lib/gmssl/make
 fi
 
 if [ $ZLIB != NONE -a $ZLIB != NO -a $ZLIB != YES ]; then

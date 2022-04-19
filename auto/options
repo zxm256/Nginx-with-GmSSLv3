@@ -147,8 +147,8 @@ PCRE_OPT=
 PCRE_CONF_OPT=
 PCRE_JIT=NO
 
-USE_OPENSSL=NO
-OPENSSL=NONE
+USE_GMSSL=NO
+GMSSL=NONE
 
 USE_ZLIB=NO
 ZLIB=NONE
@@ -358,8 +358,8 @@ use the \"--with-mail_ssl_module\" option instead"
         --with-pcre-opt=*)               PCRE_OPT="$value"          ;;
         --with-pcre-jit)                 PCRE_JIT=YES               ;;
 
-        --with-openssl=*)                OPENSSL="$value"           ;;
-        --with-openssl-opt=*)            OPENSSL_OPT="$value"       ;;
+        --with-gmssl=*)                GMSSL="$value"           ;;
+        --with-gmssl-opt=*)            GMSSL_OPT="$value"       ;;
 
         --with-md5=*)
             NGX_POST_CONF_MSG="$NGX_POST_CONF_MSG
@@ -583,8 +583,8 @@ cat << END
   --with-libatomic                   force libatomic_ops library usage
   --with-libatomic=DIR               set path to libatomic_ops library sources
 
-  --with-openssl=DIR                 set path to OpenSSL library sources
-  --with-openssl-opt=OPTIONS         set additional build options for OpenSSL
+  --with-gmssl=DIR                 set path to GmSSL library sources
+  --with-gmssl-opt=OPTIONS         set additional build options for GmSSL
 
   --with-debug                       enable debug logging
 

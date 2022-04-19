@@ -457,7 +457,7 @@ ngx_http_ssl_alpn_select(ngx_ssl_conn_t *ssl_conn, const unsigned char **out,
 
     if (SSL_select_next_proto((unsigned char **) out, outlen, srv, srvlen,
                               in, inlen)
-        != OPENSSL_NPN_NEGOTIATED)
+        != GMSSL_NPN_NEGOTIATED)
     {
         return SSL_TLSEXT_ERR_NOACK;
     }
@@ -782,7 +782,7 @@ ngx_http_ssl_merge_srv_conf(ngx_conf_t *cf, void *parent, void *child)
     {
         ngx_log_error(NGX_LOG_WARN, cf->log, 0,
             "nginx was built with SNI support, however, now it is linked "
-            "dynamically to an OpenSSL library which has no tlsext support, "
+            "dynamically to an GmSSL library which has no tlsext support, "
             "therefore SNI is not available");
     }
 

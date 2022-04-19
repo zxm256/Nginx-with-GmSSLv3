@@ -33,12 +33,12 @@ static void ngx_ssl_connection_error(ngx_connection_t *c, int sslerr, ngx_err_t 
 
 static ngx_core_module_t  ngx_gmssl_module_ctx = {
     ngx_string("gmssl"),
-    NULL, // ngx_openssl_create_conf,
+    NULL, // ngx_GMSSL_create_conf,
     NULL
 };
 
 
-ngx_module_t  ngx_openssl_module = {
+ngx_module_t  ngx_GMSSL_module = {
     NGX_MODULE_V1,
     &ngx_gmssl_module_ctx,                 /* module context */
     NULL,                                  /* module directives */
@@ -327,7 +327,7 @@ ngx_ssl_preserve_passwords(ngx_conf_t *cf, ngx_array_t *passwords)
 
         /*
          * If there are no passwords, an empty array is used
-         * to make sure OpenSSL's default password callback
+         * to make sure GmSSL's default password callback
          * won't block on reading from stdin.
          */
 
@@ -1095,7 +1095,7 @@ ngx_ssl_write_handler(ngx_event_t *wev)
 
 
 /*
- * OpenSSL has no SSL_writev() so we copy several bufs into our 16K buffer
+ * GmSSL has no SSL_writev() so we copy several bufs into our 16K buffer
  * before the SSL_write() call to decrease a SSL overhead.
  *
  * Besides for protocols such as HTTP it is possible to always buffer
@@ -1296,15 +1296,15 @@ ngx_ssl_write(ngx_connection_t *c, u_char *data, size_t size)
     }
 
 #if 0
-    sslerr = SSL_get_error(c->ssl->connection, n); // OpenSSL通过一个独立的函数返回状态是否可以再读取，mbedtls是怎么做的，是否可以以一个专用的错误代号返回值呢？			
+    sslerr = SSL_get_error(c->ssl->connection, n); // GMSSL通过一个独立的函数返回状态是否可以再读取，mbedtls是怎么做的，是否可以以一个专用的错误代号返回值呢？			
 
     if (sslerr == SSL_ERROR_ZERO_RETURN) {
 
         /*
-         * OpenSSL 1.1.1 fails to return SSL_ERROR_SYSCALL if an error
+         * GmSSL 1.1.1 fails to return SSL_ERROR_SYSCALL if an error
          * happens during SSL_write() after close_notify alert from the
          * peer, and returns SSL_ERROR_ZERO_RETURN instead,
-         * https://git.openssl.org/?p=openssl.git;a=commitdiff;h=8051ab2
+         * https://git.gmssl.org/?p=gmssl.git;a=commitdiff;h=8051ab2
          */
 
         sslerr = SSL_ERROR_SYSCALL;

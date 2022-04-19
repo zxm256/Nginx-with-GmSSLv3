@@ -2089,10 +2089,10 @@ syn keyword ngxDirectiveThirdParty contained mongo_send_timeout
 syn keyword ngxDirectiveThirdParty contained ocsp_cache_timeout
 syn keyword ngxDirectiveThirdParty contained ocsp_proxy
 
-" Nginx OpenSSL version check at startup
-" https://github.com/apcera/nginx-openssl-version
-syn keyword ngxDirectiveThirdParty contained openssl_builddate_minimum
-syn keyword ngxDirectiveThirdParty contained openssl_version_minimum
+" Nginx GmSSL version check at startup
+" https://github.com/apcera/nginx-gmssl-version
+syn keyword ngxDirectiveThirdParty contained gmssl_builddate_minimum
+syn keyword ngxDirectiveThirdParty contained gmssl_version_minimum
 
 " Automatic PageSpeed optimization module for Nginx
 " https://github.com/pagespeed/ngx_pagespeed

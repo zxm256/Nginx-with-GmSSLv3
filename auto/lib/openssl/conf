@@ -3,7 +3,7 @@
 # Copyright (C) Nginx, Inc.
 
 
-if [ $OPENSSL != NONE ]; then
+if [ $GMSSL != NONE ]; then
 
     case "$CC" in
 
@@ -19,12 +19,12 @@ END
         ;;
 
         *)
-            have=NGX_OPENSSL . auto/have
+            have=NGX_GMSSL . auto/have
             have=NGX_SSL . auto/have
 
-            CORE_INCS="$CORE_INCS $OPENSSL/.gmssl/include"
-            CORE_DEPS="$CORE_DEPS $OPENSSL/.gmssl/include/gmssl/tls.h"
-            CORE_LIBS="$CORE_LIBS $OPENSSL/.gmssl/lib/libgmssl.a"
+            CORE_INCS="$CORE_INCS $GMSSL/.gmssl/include"
+            CORE_DEPS="$CORE_DEPS $GMSSL/.gmssl/include/gmssl/tls.h"
+            CORE_LIBS="$CORE_LIBS $GMSSL/.gmssl/lib/libgmssl.a"
             CORE_LIBS="$CORE_LIBS $NGX_LIBDL"
         ;;
     esac
@@ -33,10 +33,10 @@ else
 
     if [ "$NGX_PLATFORM" != win32 ]; then
 
-        OPENSSL=NO
+        GMSSL=NO
 
         ngx_feature="GmSSL library"
-        ngx_feature_name="NGX_OPENSSL"
+        ngx_feature_name="NGX_GMSSL"
         ngx_feature_run=no
         ngx_feature_incs="#include <gmssl/version.h>"
         ngx_feature_path=
@@ -47,11 +47,11 @@ else
         if [ $ngx_found = yes ]; then
             have=NGX_SSL . auto/have
             CORE_LIBS="$CORE_LIBS $ngx_feature_libs $NGX_LIBDL"
-            OPENSSL=YES
+            GMSSL=YES
         fi
     fi
 
-    if [ $OPENSSL != YES ]; then
+    if [ $GMSSL != YES ]; then
 
 cat << END
 
