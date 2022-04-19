@@ -38,7 +38,7 @@ static ngx_core_module_t  ngx_gmssl_module_ctx = {
 };
 
 
-ngx_module_t  ngx_GMSSL_module = {
+ngx_module_t  ngx_gmssl_module = {
     NGX_MODULE_V1,
     &ngx_gmssl_module_ctx,                 /* module context */
     NULL,                                  /* module directives */
