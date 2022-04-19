@@ -14,15 +14,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: install GmSSL
-      run: git clone https://github.com/guanzhi/GmSSL.git;cd GmSSL;mkdir build;cd build; cmake ..;make ;make install
+      run: git clone https://github.com/guanzhi/GmSSL.git;cd GmSSL;mkdir build;cd build; cmake ..;make ;sudo make install
     - name: configure
       run: ./configure --with-http_ssl_module --without-http_upstream_zone_module --with-debug
     - name: make
       run: make
     - name: install
-      run: make install
-      
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      run: sudo make install
