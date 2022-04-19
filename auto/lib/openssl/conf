@@ -1,0 +1,64 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Nginx, Inc.
+
+
+if [ $OPENSSL != NONE ]; then
+
+    case "$CC" in
+
+        cl | bcc32)
+            # Someone that cares should support windows.
+
+cat << END
+
+$0: error: Ngnix's GmSSL TLS support requires a non-cl/bcc32 compiler.
+
+END
+            exit 1
+        ;;
+
+        *)
+            have=NGX_OPENSSL . auto/have
+            have=NGX_SSL . auto/have
+
+            CORE_INCS="$CORE_INCS $OPENSSL/.gmssl/include"
+            CORE_DEPS="$CORE_DEPS $OPENSSL/.gmssl/include/gmssl/tls.h"
+            CORE_LIBS="$CORE_LIBS $OPENSSL/.gmssl/lib/libgmssl.a"
+            CORE_LIBS="$CORE_LIBS $NGX_LIBDL"
+        ;;
+    esac
+
+else
+
+    if [ "$NGX_PLATFORM" != win32 ]; then
+
+        OPENSSL=NO
+
+        ngx_feature="GmSSL library"
+        ngx_feature_name="NGX_OPENSSL"
+        ngx_feature_run=no
+        ngx_feature_incs="#include <gmssl/version.h>"
+        ngx_feature_path=
+        ngx_feature_libs="-lgmssl"
+        ngx_feature_test="gmssl_version_str();"
+        . auto/feature
+
+        if [ $ngx_found = yes ]; then
+            have=NGX_SSL . auto/have
+            CORE_LIBS="$CORE_LIBS $ngx_feature_libs $NGX_LIBDL"
+            OPENSSL=YES
+        fi
+    fi
+
+    if [ $OPENSSL != YES ]; then
+
+cat << END
+
+$0: error: SSL modules require the GmSSL TLS library.
+
+END
+        exit 1
+    fi
+
+fi
