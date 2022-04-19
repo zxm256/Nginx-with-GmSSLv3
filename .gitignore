@@ -1,3 +1,4 @@
 tools/*.pem
 *.o
 *._*
+*.DS_Store

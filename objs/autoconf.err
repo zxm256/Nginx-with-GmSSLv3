@@ -185,7 +185,7 @@ cc -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -o objs/autotest objs/autotest.c
 ----------------------------------------
 checking for crypt()
 
-/tmp/ccdTU7bp.o: In function `main':
+/tmp/ccRZFZhj.o: In function `main':
 autotest.c:(.text+0x19): undefined reference to `crypt'
 collect2: error: ld returned 1 exit status
 ----------
@@ -299,7 +299,7 @@ checking for statvfs()
 ----------------------------------------
 checking for dlopen()
 
-/tmp/ccU4aRWz.o: In function `main':
+/tmp/ccrqOKjH.o: In function `main':
 autotest.c:(.text+0xf): undefined reference to `dlopen'
 autotest.c:(.text+0x23): undefined reference to `dlsym'
 collect2: error: ld returned 1 exit status
@@ -592,7 +592,7 @@ objs/autotest.c: In function 'main':
 objs/autotest.c:7:5: warning: implicit declaration of function 'setproctitle' [-Wimplicit-function-declaration]
     7 |     setproctitle("test");;
       |     ^~~~~~~~~~~~
-/tmp/ccRKX7bb.o: In function `main':
+/tmp/cclQv4Uh.o: In function `main':
 autotest.c:(.text+0x14): undefined reference to `setproctitle'
 collect2: error: ld returned 1 exit status
 ----------
@@ -632,7 +632,7 @@ objs/autotest.c:7:18: warning: implicit declaration of function 'strerrordesc_np
 objs/autotest.c:7:16: warning: assignment to 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
     7 |     char *p; p = strerrordesc_np(0);
       |                ^
-/tmp/ccZE5yno.o: In function `main':
+/tmp/ccW2Wyeu.o: In function `main':
 autotest.c:(.text+0x13): undefined reference to `strerrordesc_np'
 collect2: error: ld returned 1 exit status
 ----------
@@ -654,7 +654,7 @@ cc -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -o objs/autotest objs/autotest.c
 ----------------------------------------
 checking for sys_nerr
 
-/tmp/cc5T6kir.o: In function `main':
+/tmp/ccM2g9ix.o: In function `main':
 autotest.c:(.text+0x6): warning: `sys_nerr' is deprecated; use `strerror' or `strerror_r' instead
 135
 ----------------------------------------
@@ -688,7 +688,7 @@ checking for System V shared memory
 ----------------------------------------
 checking for POSIX semaphores
 
-/tmp/ccWZ6hkF.o: In function `main':
+/tmp/cc8W5vLK.o: In function `main':
 autotest.c:(.text+0x29): undefined reference to `sem_init'
 autotest.c:(.text+0x41): undefined reference to `sem_destroy'
 collect2: error: ld returned 1 exit status
