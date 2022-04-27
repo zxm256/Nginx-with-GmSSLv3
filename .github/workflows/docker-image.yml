@@ -25,7 +25,7 @@ jobs:
     - name: Push image
       run: |
         # 拼接镜像 id，这个镜像 id 就是在使用 docker 镜像时 pull 后面的名字。
-        IMAGE_ID=libra146/$IMAGE_NAME
+        IMAGE_ID=${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME
 
         # 将所有的大写字母转为小写
         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
