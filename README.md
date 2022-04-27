@@ -7,6 +7,25 @@
 
 GmSSL 3.0是GmSSL的一个大版本更新，采用了新设计的架构和API，因此无法像之前的版本兼容那些依赖OpenSSL API的应用。为了验证和证明GmSSL 3.0的可用性，有必要让GmSSL 3.0可以兼容最重要的应用类型，即HTTPS服务器。我们选择在Nginx上添加对GmSSL 3.0的支持。因此这个项目对于GmSSL 3.0有非常重要的作用。
 
+
+## 通过Docker直接使用
+
+doker启动的命令如下：
+
+```
+docker run -v $PATH_TO_CERTS:/certs -p 4443:443 -d zhaoxiaomeng/nginx_with_gmsslv3
+```
+
+注意，
+* PATH_TO_CERTS是存放Nginx-with-GmSSLv3的服务端国密私钥和国密证书的目录
+* Nginx-with-GmSSLv3默认使用的私钥名为signkey.pem 默认使用的证书名为signcert.pem
+
+如果没有证书和私钥的话，可以通过以下步骤生成：
+
+* 编译安装GmSSL3.0
+* 使用tools/reqsign_ext.sh脚本生成所需CA证书、私钥等。
+
+
 ## 编译与安装
 
 ### 编译安装GmSSL3.0
