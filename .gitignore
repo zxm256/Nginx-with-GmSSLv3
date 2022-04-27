@@ -4,3 +4,4 @@ tools/*.pem
 *.DS_Store
 objs/*
 Makefile
+.pem

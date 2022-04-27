@@ -6,16 +6,16 @@
 
 
 # generate a req and sign by ca certificate
-sm2keygen -pass 123456 -out cakey.pem -pubout capubkey.pem
-certgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN CA -days 365 -key cakey.pem -pass 123456 -out cacert.pem
-certparse -in cacert.pem
+gmssl sm2keygen -pass 123456 -out cakey.pem -pubout capubkey.pem
+gmssl certgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN CA -days 365 -key cakey.pem -pass 123456 -out cacert.pem
+gmssl certparse -in cacert.pem
 
-sm2keygen -pass 123456 -out signkey.pem -pubout signpubkey.pem
-reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN Alice -days 365 -key signkey.pem -pass 123456 -out signreq.pem
-reqsign -in signreq.pem -days 365 -key_usage digitalSignature -cacert cacert.pem -key cakey.pem -pass 123456 -out signcert.pem
-certparse -in signcert.pem
+gmssl sm2keygen -pass 123456 -out signkey.pem -pubout signpubkey.pem
+gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN Alice -days 365 -key signkey.pem -pass 123456 -out signreq.pem
+gmssl reqsign -in signreq.pem -days 365 -key_usage digitalSignature -cacert cacert.pem -key cakey.pem -pass 123456 -out signcert.pem
+gmssl certparse -in signcert.pem
 
-sm2keygen -pass 123456 -out enckey.pem -pubout encpubkey.pem
-reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN Alice -days 365 -key enckey.pem -pass 123456 -out encreq.pem
-reqsign -in encreq.pem -days 365 -key_usage digitalSignature -cacert cacert.pem -key cakey.pem -pass 123456 -out enccert.pem
-certparse -in enccert.pem
+gmssl sm2keygen -pass 123456 -out enckey.pem -pubout encpubkey.pem
+gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN Alice -days 365 -key enckey.pem -pass 123456 -out encreq.pem
+gmssl reqsign -in encreq.pem -days 365 -key_usage digitalSignature -cacert cacert.pem -key cakey.pem -pass 123456 -out enccert.pem
+gmssl certparse -in enccert.pem
