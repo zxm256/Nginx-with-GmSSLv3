@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: install GmSSL
+      run: git clone https://github.com/guanzhi/GmSSL.git;cd GmSSL;mkdir build;cd build; cmake ..;make ;sudo make install
+    - name: configure
+      run: ./configure --with-http_ssl_module --without-http_upstream_zone_module --with-debug
+    - name: make
+      run: make
+    - name: install
+      run: sudo make install

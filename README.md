@@ -1,5 +1,7 @@
 # Nginx-with-GmSSLv3
 
+[![CMake](https://github.com/zhaoxiaomeng/Nginx-with-GmSSLv3/workflows/CI/badge.svg)](https://github.com/zhaoxiaomeng/Nginx-with-GmSSLv3/actions/workflows/CI.yml)
+
 [TOC]
 
 
