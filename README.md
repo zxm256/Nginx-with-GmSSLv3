@@ -108,7 +108,7 @@ gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/tools$ ./reqsign_ext.sh
         server_name  localhost;
 
         ssl_certificate      /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signcert.pem;
-        ssl_certificate_key  /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signkey.pem
+        ssl_certificate_key  /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signkey.pem;
 
         ssl_session_cache    shared:SSL:1m;
         ssl_session_timeout  5m;
@@ -131,8 +131,8 @@ gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/tools$ ./reqsign_ext.sh
         server_name  localhost;
 
         ssl_certificate      /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signcert.pem;
-        ssl_certificate_key  /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signkey.pem
-		ssl_verify_client off;
+        ssl_certificate_key  /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signkey.pem;
+        ssl_verify_client off;
         ssl_session_cache    shared:SSL:1m;
         ssl_session_timeout  5m;
 
