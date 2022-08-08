@@ -496,7 +496,7 @@ ngx_ssl_create_connection(ngx_ssl_t *ssl, ngx_connection_t *c, ngx_uint_t flags)
 
     sc->ssl_ctx = *ssl;
 
-    if (tls_set_fd(sc->connection, c->fd) == 0) {
+    if (tls_set_socket(sc->connection, c->fd) == 0) {
         ngx_ssl_error(NGX_LOG_ALERT, c->log, 0, "SSL_set_fd() failed");
         return NGX_ERROR;
     }
@@ -591,9 +591,8 @@ ngx_ssl_handshake(ngx_connection_t *c)
         return NGX_ERROR;
     }
 
-    n = tls12_accept(tls_connect, 443, certsfp, &sm2_key, NULL, NULL, 0);
-
-    //n = SSL_do_handshake(c->ssl->connection);
+    n = tls_do_handshake(tls_connect);
+	
     if (n != 1) {
         error_print();
         return NGX_ERROR;
@@ -892,7 +891,8 @@ ngx_ssl_recv(ngx_connection_t *c, u_char *buf, size_t size)
     for ( ;; ) {
         size_t len = size;
 
-        n = tls_recv(c->ssl->connection, buf, &len);
+        n = tls_recv(c->ssl->connection, buf, sizeof(buf), &len);
+		
         n = len;
 
         ngx_log_debug1(NGX_LOG_DEBUG_EVENT, c->log, 0, "SSL_read: %d", n);
@@ -1263,6 +1263,9 @@ ssize_t
 ngx_ssl_write(ngx_connection_t *c, u_char *data, size_t size)
 {
     int        n, sslerr = 1;
+	
+	size_t sentlen;
+	
     ngx_err_t  err = 1;
 
     error_print();
@@ -1271,8 +1274,10 @@ ngx_ssl_write(ngx_connection_t *c, u_char *data, size_t size)
 
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT, c->log, 0, "SSL to write: %uz", size);
 
-    n = tls_send(c->ssl->connection, data, size);
-
+    n = tls_send(c->ssl->connection, data, size, &sentlen);
+	
+	n = sentlen;
+	
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT, c->log, 0, "SSL_write: %d", n);
 
     if (n > 0) {
