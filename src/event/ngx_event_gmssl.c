@@ -557,14 +557,17 @@ ngx_ssl_set_session(ngx_connection_t *c, ngx_ssl_session_t *session)
 ngx_int_t
 ngx_ssl_handshake(ngx_connection_t *c)
 {
-    int        n;
+    ssize_t n=0;
     int  sslerr;
     ngx_err_t  err;
     ngx_int_t  rc;
-    FILE *certsfp;
-    FILE *keyfp;
-    SM2_KEY sm2_key;
+    //FILE *certsfp;
+    //FILE *keyfp;
+    //SM2_KEY sm2_key;
 
+	
+	int server_ciphers[] = { TLS_cipher_sm4_gcm_sm3, };
+	
     error_print();
 
     if (c->ssl->in_ocsp) {
@@ -573,34 +576,31 @@ ngx_ssl_handshake(ngx_connection_t *c)
 
     ngx_ssl_connection_t *ssl_connection = c->ssl;
     ngx_ssl_t *ssl_ctx = &ssl_connection->ssl_ctx;
-    TLS_CONNECT *tls_connect = ssl_connection->connection;
+	TLS_CTX ctx;
+    TLS_CONNECT *conn = ssl_connection->connection;
 
-
-    if (!(certsfp = fopen((char *)ssl_ctx->certfile, "r"))) {
-        ngx_ssl_error(NGX_LOG_EMERG, c->log, 0,
-                      "cannot load certificate \"%s\"",
-                      ssl_ctx->certfile);
-        return NGX_ERROR;
-    }
-
-    if (!(keyfp = fopen((char *)ssl_ctx->keyfile, "r"))
-        || sm2_private_key_info_decrypt_from_pem(&sm2_key, ssl_ctx->password, keyfp) != 1) {
-        ngx_ssl_error(NGX_LOG_EMERG, c->log, 0,
-                      "cannot load certificate key \"%s\"",
-                      ssl_ctx->keyfile);
-        return NGX_ERROR;
-    }
-
-    n = tls_do_handshake(tls_connect);
+	memset(&ctx, 0, sizeof(ctx));
+	
+	if (tls_ctx_init(&ctx, TLS_protocol_tls13, TLS_server_mode)!= 1
+		|| tls_ctx_set_cipher_suites(&ctx, server_ciphers, sizeof(server_ciphers)/sizeof(int)) != 1
+		|| tls_ctx_set_certificate_and_key(&ctx,  (char *)ssl_ctx->certfile, (char *)ssl_ctx->keyfile, (char *)ssl_ctx->password) != 1) {
+		error_print();
+		return -1;
+	}
+	if (tls_init(conn, &ctx) != 1
+		|| tls_set_socket(conn, c->fd) != 1) {
+		error_print();
+		return -1;
+	}
+	
+	n = tls_do_handshake(conn) ;
 	
     if (n != 1) {
         error_print();
         return NGX_ERROR;
     }
 
-
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT, c->log, 0, "SSL_do_handshake: %d", n);
-
 
     // 这里意味着握手成功了
     if (n == 1) {
@@ -866,7 +866,7 @@ ssize_t
 ngx_ssl_recv(ngx_connection_t *c, u_char *buf, size_t size)
 {
     int  n, bytes;
-
+	
     error_print();
 
     if (c->ssl->last == NGX_ERROR) {
@@ -891,7 +891,7 @@ ngx_ssl_recv(ngx_connection_t *c, u_char *buf, size_t size)
     for ( ;; ) {
         size_t len = size;
 
-        n = tls_recv(c->ssl->connection, buf, sizeof(buf), &len);
+        n = tls13_recv(c->ssl->connection, buf, sizeof(buf), &len);
 		
         n = len;
 
@@ -1274,7 +1274,7 @@ ngx_ssl_write(ngx_connection_t *c, u_char *data, size_t size)
 
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT, c->log, 0, "SSL to write: %uz", size);
 
-    n = tls_send(c->ssl->connection, data, size, &sentlen);
+    n = tls13_send(c->ssl->connection, data, size, &sentlen);
 	
 	n = sentlen;
 	

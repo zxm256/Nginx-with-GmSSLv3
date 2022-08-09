@@ -339,6 +339,7 @@ ngx_http_init_connection(ngx_connection_t *c)
     sscf = ngx_http_get_module_srv_conf(hc->conf_ctx, ngx_http_ssl_module);
 
     if (sscf->enable || hc->addr_conf->ssl) {
+		
         hc->ssl = 1;
         c->log->action = "SSL handshaking";
         rev->handler = ngx_http_ssl_handshake;
@@ -676,7 +677,6 @@ ngx_http_ssl_handshake(ngx_event_t *rev)
         ngx_http_close_connection(c);
         return;
     }
-
     size = hc->proxy_protocol ? sizeof(buf) : 1;
 
     n = recv(c->fd, (char *) buf, size, MSG_PEEK);
@@ -684,7 +684,7 @@ ngx_http_ssl_handshake(ngx_event_t *rev)
     err = ngx_socket_errno;
 
     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, rev->log, 0, "http recv(): %z", n);
-
+		
     if (n == -1) {
         if (err == NGX_EAGAIN) {
             rev->ready = 0;
