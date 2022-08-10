@@ -561,11 +561,7 @@ ngx_ssl_handshake(ngx_connection_t *c)
     int  sslerr;
     ngx_err_t  err;
     ngx_int_t  rc;
-    //FILE *certsfp;
-    //FILE *keyfp;
-    //SM2_KEY sm2_key;
 
-	
 	int server_ciphers[] = { TLS_cipher_sm4_gcm_sm3, };
 	
     error_print();
@@ -732,6 +728,7 @@ ngx_ssl_handshake_log(ngx_connection_t *c)
 
     if (cipher) {
         //SSL_CIPHER_description(cipher, &buf[1], 128);
+		
 	snprintf(buf, 128, "GMSSL_SM2_WITH_SM4_SM3");
 
         for (s = &buf[1], d = buf; *s; s++) {
@@ -754,7 +751,7 @@ ngx_ssl_handshake_log(ngx_connection_t *c)
 
         ngx_log_debug2(NGX_LOG_DEBUG_EVENT, c->log, 0,
                        "SSL: %s, cipher: \"%s\"",
-                       "TLS 1.2", &buf[1]);
+                       "TLS 1.3", &buf[1]);
 
 	/*
         if (SSL_session_reused(c->ssl->connection)) {
@@ -1575,7 +1572,7 @@ ngx_ssl_get_protocol(ngx_connection_t *c, ngx_pool_t *pool, ngx_str_t *s)
 {
 
     error_print();
-    s->data = (u_char *) "TLS 1.2";
+    s->data = (u_char *) "TLS 1.3";
     return NGX_OK;
 }
 
