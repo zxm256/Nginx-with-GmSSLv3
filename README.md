@@ -7,6 +7,7 @@
 
 GmSSL 3.0是GmSSL的一个大版本更新，采用了新设计的架构和API，因此无法像之前的版本兼容那些依赖OpenSSL API的应用。为了验证和证明GmSSL 3.0的可用性，有必要让GmSSL 3.0可以兼容最重要的应用类型，即HTTPS服务器。我们选择在Nginx上添加对GmSSL 3.0的支持。因此这个项目对于GmSSL 3.0有非常重要的作用。
 
+本项目基于 Nginx 1.21.0修改。
 
 ## 简单上手
 
@@ -19,8 +20,7 @@ docker run -v $PATH_TO_CERTS:/certs -p 4443:443 -d zhaoxiaomeng/nginx_with_gmssl
 ```
 
 注意，
-* PATH_TO_CERTS是存放Nginx-with-GmSSLv3的服务端国密私钥和国密证书的目录
-* Nginx-with-GmSSLv3默认使用的私钥名为signkey.pem 默认使用的证书名为signcert.pem
+* Nginx-with-GmSSLv3默认使用的私钥名为signkey.pem 默认使用的证书名为certs.pem
 
 如果没有证书和私钥的话，可以通过以下步骤生成：
 
@@ -86,17 +86,18 @@ gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/tools$ ./reqsign_ext.sh
 
 ```
 以上命令将会在tools目录下生成一系列文件，包括：
+* 根CA私钥 rootcakey.pem
+* 根CA证书 rootcacert.pem
 * CA私钥 cakey.pem
-* CA公钥 capubkey.pem
+* CA证书请求 careq.pem
 * CA证书 cacert.pem
 * 签名私钥 signkey.pem
-* 签名公钥 signpubkey.pem
 * 签名证书请求 signreq.pem
 * 签名证书 signcert.pem
-* 加密私钥 enckey.pem
-* 加密公钥 encpubkey.pem
-* 加密证书请求 encreq.pem
-* 加密证书 enccert.pem
+* 服务端证书 certs.pem
+* 客户端私钥 enckey.pem
+* 客户端书请求 encreq.pem
+* 客户端证书 enccert.pem
 
 #### Nginx配置文件修改
 
@@ -107,7 +108,7 @@ gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/tools$ ./reqsign_ext.sh
         listen       443 ssl;
         server_name  localhost;
 
-        ssl_certificate      /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signcert.pem;
+        ssl_certificate      /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/certs.pem;
         ssl_certificate_key  /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signkey.pem;
 
         ssl_session_cache    shared:SSL:1m;
@@ -130,7 +131,7 @@ gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/tools$ ./reqsign_ext.sh
         listen       443 ssl;
         server_name  localhost;
 
-        ssl_certificate      /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signcert.pem;
+        ssl_certificate      /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/certs.pem;
         ssl_certificate_key  /home/gmssl/nginx_doc/Nginx-with-GmSSLv3/tools/signkey.pem;
         ssl_verify_client off;
         ssl_session_cache    shared:SSL:1m;
@@ -155,12 +156,13 @@ gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ sudo /usr/local/nginx/sbin/nginx
 ```
 
 在执行以上命令时有可能报错，提示端口已经被占用了，因此需要修改`/usr/local/nginx/conf/nginx.conf`中的配置端口号。
+
 #### 测试Nginx
 
 GmSSL3.0安装后有测试国密SSL协议的功能，在命令行中执行以下命令：
 
 ```
-gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/tools$ tls12_client -host 127.0.0.1 -port 443 -cacert cacert.pem
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/tools$ gmssl tls13_client -host 127.0.0.1 -port 443
 ```
 
 其中cacert.pem为上面生成的CA证书的位置。
