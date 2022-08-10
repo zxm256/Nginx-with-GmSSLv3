@@ -1,21 +1,23 @@
 #!/bin/bash -x
 
+gmssl sm2keygen -pass 123456 -out rootcakey.pem
+gmssl certgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN ROOTCA -days 3650 -key rootcakey.pem -pass 123456 -out rootcacert.pem -key_usage keyCertSign -key_usage cRLSign
+gmssl certparse -in rootcacert.pem
 
-# 这里我们需要生成两个证书，一个是签名证书，一个加密证书，用相同的CA证书签名
-# 这两个证书的CN是一样的吗？应该是一样的吧，只是密钥不同，并且KeyUsage不同
-
-
-# generate a req and sign by ca certificate
-gmssl sm2keygen -pass 123456 -out cakey.pem -pubout capubkey.pem
-gmssl certgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN CA -days 365 -key cakey.pem -pass 123456 -out cacert.pem
+gmssl sm2keygen -pass 123456 -out cakey.pem
+gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN "Sub CA" -days 3650 -key cakey.pem -pass 123456 -out careq.pem
+gmssl reqsign -in careq.pem -days 365 -key_usage keyCertSign -path_len_constraint 0 -cacert rootcacert.pem -key rootcakey.pem -pass 123456 -out cacert.pem
 gmssl certparse -in cacert.pem
 
-gmssl sm2keygen -pass 123456 -out signkey.pem -pubout signpubkey.pem
-gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN Alice -days 365 -key signkey.pem -pass 123456 -out signreq.pem
+gmssl sm2keygen -pass 123456 -out signkey.pem
+gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN localhost -days 365 -key signkey.pem -pass 123456 -out signreq.pem
 gmssl reqsign -in signreq.pem -days 365 -key_usage digitalSignature -cacert cacert.pem -key cakey.pem -pass 123456 -out signcert.pem
 gmssl certparse -in signcert.pem
 
-gmssl sm2keygen -pass 123456 -out enckey.pem -pubout encpubkey.pem
-gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN Alice -days 365 -key enckey.pem -pass 123456 -out encreq.pem
-gmssl reqsign -in encreq.pem -days 365 -key_usage digitalSignature -cacert cacert.pem -key cakey.pem -pass 123456 -out enccert.pem
-gmssl certparse -in enccert.pem
+cat signcert.pem > certs.pem
+cat cacert.pem >> certs.pem
+
+gmssl sm2keygen -pass 123456 -out clientkey.pem
+gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN Client -days 365 -key clientkey.pem -pass 123456 -out clientreq.pem
+gmssl reqsign -in clientreq.pem -days 365 -key_usage digitalSignature -cacert cacert.pem -key cakey.pem -pass 123456 -out clientcert.pem
+gmssl certparse -in clientcert.pem
