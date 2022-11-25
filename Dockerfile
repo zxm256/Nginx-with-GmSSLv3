@@ -18,11 +18,10 @@ echo "deb http://archive.canonical.com/ubuntu focal partner " >> /etc/apt/source
 
 RUN apt-get update -y
 RUN apt-get install tzdata
-RUN apt-get install libpcre3 libpcre3-dev zlib1g zlib1g-dev unzip wget cmake build-essential -yqq 
-RUN wget https://github.com/guanzhi/GmSSL/archive/refs/heads/develop.zip -O develop.zip
-RUN unzip develop.zip
+RUN apt-get install git libpcre3 libpcre3-dev zlib1g zlib1g-dev unzip wget cmake build-essential -yqq 
+RUN git clone https://github.com/guanzhi/GmSSL.git
 WORKDIR /build
-RUN cmake /GmSSL-develop/.
+RUN cmake /GmSSL/.
 RUN make install
 RUN ldconfig
 WORKDIR /Nginx-with-GmSSLv3
