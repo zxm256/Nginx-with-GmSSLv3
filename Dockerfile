@@ -24,6 +24,7 @@ RUN unzip develop.zip
 WORKDIR /build
 RUN cmake /GmSSL-develop/.
 RUN make install
+RUN ldconfig
 WORKDIR /Nginx-with-GmSSLv3
 RUN ls /usr/local/bin
 COPY . .
