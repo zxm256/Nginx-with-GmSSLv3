@@ -31,7 +31,6 @@ RUN cp auto/configure .
 RUN ./configure --with-http_ssl_module --without-http_upstream_zone_module --with-debug
 RUN make
 RUN make install
-
 #默认配置文件
 COPY ./conf/nginx_ssl.conf /usr/local/nginx/conf/nginx.conf
 EXPOSE 443/tcp
