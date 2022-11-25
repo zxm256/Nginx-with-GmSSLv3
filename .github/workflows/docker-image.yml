@@ -4,6 +4,9 @@ on:
   push:
     branches: [ master ]
     tags: ['*']
+    
+  pull_request:
+    branches: [ master ]
 
 env:
   # 设置 docker 镜像名
