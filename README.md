@@ -33,28 +33,43 @@ docker run -v $PATH_TO_CERTS:/certs -p 4443:443 -d zhaoxiaomeng/nginx_with_gmssl
 
 <p id="compile_gmssl"></p> 
 
-### 编译安装GmSSL3.0
 
-本项目依赖GmSSL3.0，首先需要编译安装GmSSL3.0
-
+### 下载Nginx-with-GmSSLv3源代码
 ```
-gmssl@ubuntu:~/nginx_doc$ git clone https://github.com/guanzhi/GmSSL.git
-gmssl@ubuntu:~/nginx_doc$ cd GmSSL/
-gmssl@ubuntu:~/nginx_doc/GmSSL$ mkdir build
-gmssl@ubuntu:~/nginx_doc/GmSSL$ cd build/
-gmssl@ubuntu:~/nginx_doc/GmSSL/build$ cmake ..
-gmssl@ubuntu:~/nginx_doc/GmSSL/build$ make
-gmssl@ubuntu:~/nginx_doc/GmSSL/build$ sudo make install
+gmssl@ubuntu:~/nginx_doc$ git clone https://github.com/zhaoxiaomeng/Nginx-with-GmSSLv3.git
 ```
 
 ### 编译安装Nginx-with-GmSSLv3
 
-下载源代码
+本项目依赖GmSSL3.0，请提前安装GMSSL3.0，或者通过--with-gmssl指定GmSSL源代码目录
+
+
+#### 全局安装GmSSL3.0
+
+建议使用本项目调试通过的GmSSL子模块版本：
+
 ```
-gmssl@ubuntu:~/nginx_doc$ git clone https://github.com/zhaoxiaomeng/Nginx-with-GmSSLv3.git
-gmssl@ubuntu:~/nginx_doc$ cd Nginx-with-GmSSLv3/
+gmssl@ubuntu:~/nginx_doc$ cd Nginx-with-GmSSLv3
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ git submodule init
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ git submodule update
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ cd GmSSL/
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/GmSSL$ mkdir build
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/GmSSL$ cd build/
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/GmSSL/build$ cmake ..
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/GmSSL/build$ make
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3/GmSSL/build$ sudo make install
+```
+
+#### 使用--with-gmssl指定GmSSL3.0源代码目录
+
+建议使用本项目的GmSSL子模块，编译安装的方法如下：
+
+```
+gmssl@ubuntu:~/nginx_doc$ cd Nginx-with-GmSSLv3
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ git submodule init
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ git submodule update
 gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ cp auto/configure .
-gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ ./configure --with-http_ssl_module --without-http_upstream_zone_module --with-debug
+gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ ./configure --with-http_ssl_module --without-http_upstream_zone_module --with-gmssl=./GmSSL/  --with-debug
 gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ make
 gmssl@ubuntu:~/nginx_doc/Nginx-with-GmSSLv3$ sudo make install
 ```

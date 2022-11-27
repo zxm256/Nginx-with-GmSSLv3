@@ -149,6 +149,7 @@ PCRE_JIT=NO
 
 USE_GMSSL=NO
 GMSSL=NONE
+GMSSL_OPT=
 
 USE_ZLIB=NO
 ZLIB=NONE
@@ -358,8 +359,8 @@ use the \"--with-mail_ssl_module\" option instead"
         --with-pcre-opt=*)               PCRE_OPT="$value"          ;;
         --with-pcre-jit)                 PCRE_JIT=YES               ;;
 
-        --with-gmssl=*)                GMSSL="$value"           ;;
-        --with-gmssl-opt=*)            GMSSL_OPT="$value"       ;;
+        --with-gmssl=*)                  GMSSL="$value"             ;;
+        --with-gmssl-opt=*)              GMSSL_OPT="$value"         ;;
 
         --with-md5=*)
             NGX_POST_CONF_MSG="$NGX_POST_CONF_MSG
