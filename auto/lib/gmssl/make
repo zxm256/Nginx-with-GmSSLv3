@@ -1,0 +1,26 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Nginx, Inc.
+
+
+case "$CC" in
+    *)
+        case $GMSSL in
+            /*) ngx_prefix="$GMSSL/.gmssl" ;;
+            *)  ngx_prefix="$PWD/$GMSSL/.gmssl" ;;
+        esac
+
+        cat << END                                            >> $NGX_MAKEFILE
+
+$GMSSL/.gmssl/include/gmssl/tls.h:	$NGX_MAKEFILE
+	cd $GMSSL \\
+	&& if [ -f Makefile ]; then \$(MAKE) clean; fi \\
+	&& cmake . -DCMAKE_INSTALL_PREFIX=$ngx_prefix $GMSSL_OPT \\
+	&& \$(MAKE) \\
+	&& \$(MAKE) install
+
+END
+
+    ;;
+
+esac
