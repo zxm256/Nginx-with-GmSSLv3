@@ -15,12 +15,13 @@ case "$CC" in
 $GMSSL/.gmssl/include/gmssl/tls.h:	$NGX_MAKEFILE
 	cd $GMSSL \\
 	&& if [ -f Makefile ]; then \$(MAKE) clean; fi \\
-	&& cmake . -DCMAKE_INSTALL_PREFIX=$ngx_prefix $GMSSL_OPT \\
-	&& \$(MAKE) \\
-	&& \$(MAKE) install
+	&& cmake -B build -DCMAKE_INSTALL_PREFIX=$ngx_prefix $GMSSL_OPT \\
+	&& cmake --build build \\
+	&& \$(MAKE) install 
 
 END
 
     ;;
 
 esac
+
