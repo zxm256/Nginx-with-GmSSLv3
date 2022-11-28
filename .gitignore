@@ -5,5 +5,4 @@ tools/*.pem
 objs/*
 Makefile
 .pem
-GmSSL/*
 build/*
