@@ -6,3 +6,4 @@ objs/*
 Makefile
 *.pem
 build/*
+.vscode

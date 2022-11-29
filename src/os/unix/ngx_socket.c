@@ -4,10 +4,8 @@
  * Copyright (C) Nginx, Inc.
  */
 
-
 #include <ngx_config.h>
 #include <ngx_core.h>
-
 
 /*
  * ioctl(FIONBIO) sets a non-blocking mode with the single syscall
@@ -20,97 +18,68 @@
  * ioctl() in Linux 2.4 and 2.6 uses BKL, however, fcntl(F_SETFL) uses it too.
  */
 
-
 #if (NGX_HAVE_FIONBIO)
 
-int
-ngx_nonblocking(ngx_socket_t s)
-{
-    int  nb;
+int ngx_nonblocking(ngx_socket_t s) {
+  int nb;
 
-    nb = 1;
+  nb = 1;
 
-    return ioctl(s, FIONBIO, &nb);
+  return ioctl(s, FIONBIO, &nb);
 }
 
+int ngx_blocking(ngx_socket_t s) {
+  int nb;
 
-int
-ngx_blocking(ngx_socket_t s)
-{
-    int  nb;
+  nb = 0;
 
-    nb = 0;
-
-    return ioctl(s, FIONBIO, &nb);
+  return ioctl(s, FIONBIO, &nb);
 }
 
 #endif
 
-
 #if (NGX_FREEBSD)
 
-int
-ngx_tcp_nopush(ngx_socket_t s)
-{
-    int  tcp_nopush;
+int ngx_tcp_nopush(ngx_socket_t s) {
+  int tcp_nopush;
 
-    tcp_nopush = 1;
+  tcp_nopush = 1;
 
-    return setsockopt(s, IPPROTO_TCP, TCP_NOPUSH,
-                      (const void *) &tcp_nopush, sizeof(int));
+  return setsockopt(s, IPPROTO_TCP, TCP_NOPUSH, (const void *)&tcp_nopush,
+                    sizeof(int));
 }
 
+int ngx_tcp_push(ngx_socket_t s) {
+  int tcp_nopush;
 
-int
-ngx_tcp_push(ngx_socket_t s)
-{
-    int  tcp_nopush;
+  tcp_nopush = 0;
 
-    tcp_nopush = 0;
-
-    return setsockopt(s, IPPROTO_TCP, TCP_NOPUSH,
-                      (const void *) &tcp_nopush, sizeof(int));
+  return setsockopt(s, IPPROTO_TCP, TCP_NOPUSH, (const void *)&tcp_nopush,
+                    sizeof(int));
 }
 
 #elif (NGX_LINUX)
 
+int ngx_tcp_nopush(ngx_socket_t s) {
+  int cork;
 
-int
-ngx_tcp_nopush(ngx_socket_t s)
-{
-    int  cork;
+  cork = 1;
 
-    cork = 1;
-
-    return setsockopt(s, IPPROTO_TCP, TCP_CORK,
-                      (const void *) &cork, sizeof(int));
+  return setsockopt(s, IPPROTO_TCP, TCP_CORK, (const void *)&cork, sizeof(int));
 }
 
+int ngx_tcp_push(ngx_socket_t s) {
+  int cork;
 
-int
-ngx_tcp_push(ngx_socket_t s)
-{
-    int  cork;
+  cork = 0;
 
-    cork = 0;
-
-    return setsockopt(s, IPPROTO_TCP, TCP_CORK,
-                      (const void *) &cork, sizeof(int));
+  return setsockopt(s, IPPROTO_TCP, TCP_CORK, (const void *)&cork, sizeof(int));
 }
 
 #else
 
-int
-ngx_tcp_nopush(ngx_socket_t s)
-{
-    return 0;
-}
+int ngx_tcp_nopush(ngx_socket_t s) { return 0; }
 
-
-int
-ngx_tcp_push(ngx_socket_t s)
-{
-    return 0;
-}
+int ngx_tcp_push(ngx_socket_t s) { return 0; }
 
 #endif
