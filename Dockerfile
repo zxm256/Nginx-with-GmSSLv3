@@ -45,8 +45,6 @@ RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone
 
 COPY --from=buildpack /usr/local/lib/libgmssl.* /usr/local/lib/
-RUN ldconfig
-
 COPY --from=buildpack /etc/nginx /etc/nginx
 COPY --from=buildpack /usr/local/sbin/nginx /usr/local/sbin/nginx
 COPY --from=buildpack /usr/local/nginx /usr/local/nginx
